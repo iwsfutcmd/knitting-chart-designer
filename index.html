@@ -333,15 +333,16 @@
         .color-picker-controls {
             margin-top: 15px;
             padding-top: 15px;
-            border-top: 1px solid #4b0082;
+            border-top: 1px solid #ddd;
             display: flex;
             gap: 10px;
             align-items: center;
             flex-wrap: wrap;
+            transition: all 0.5s ease;
         }
 
-        .color-picker-controls label {
-            color: #c080ff;
+        body[data-theme="goth"] .color-picker-controls {
+            border-top: 1px solid #4b0082;
         }
 
         input[type="color"] {
