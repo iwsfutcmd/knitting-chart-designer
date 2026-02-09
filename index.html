@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🦇 Gothic Knitting Chart Designer 💀</title>
+    <title>Knitting Chart Designer</title>
     <style>
         * {
             margin: 0;
@@ -12,15 +12,41 @@
         }
 
         body {
-            font-family: 'Courier New', 'Courier', monospace;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+            min-height: 100vh;
+            transition: all 0.5s ease;
+        }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1001;
+            opacity: 0.3;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            user-select: none;
+        }
+
+        .theme-toggle:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        /* GOTH MODE - activated by data attribute */
+        body[data-theme="goth"] {
+            font-family: 'Courier New', 'Courier', monospace;
             background: linear-gradient(135deg, #1a0033 0%, #000000 50%, #1a0033 100%);
             background-attachment: fixed;
             color: #e0e0e0;
-            min-height: 100vh;
         }
 
-        body::before {
+        body[data-theme="goth"]::before {
             content: '🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀';
             position: fixed;
             top: 5px;
@@ -32,7 +58,7 @@
             pointer-events: none;
         }
 
-        body::after {
+        body[data-theme="goth"]::after {
             content: '💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇';
             position: fixed;
             bottom: 5px;
@@ -44,38 +70,60 @@
             pointer-events: none;
         }
 
+        body[data-theme="goth"] .theme-toggle {
+            opacity: 0.7;
+        }
+
         .container {
             max-width: 1200px;
-            margin: 50px auto 20px auto;
-            background-color: #1a0a1a;
+            margin: 0 auto;
+            background-color: white;
             padding: 30px;
             border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+        }
+
+        body[data-theme="goth"] .container {
+            margin: 50px auto 20px auto;
+            background-color: #1a0a1a;
             box-shadow: 0 0 30px rgba(139, 0, 139, 0.5), 0 0 60px rgba(75, 0, 130, 0.3);
             border: 2px solid #4b0082;
         }
 
         h1 {
             margin-bottom: 20px;
-            color: #c080ff;
+            color: #333;
             text-align: center;
+            font-size: 2em;
+            transition: all 0.5s ease;
+        }
+
+        body[data-theme="goth"] h1 {
+            color: #c080ff;
             font-size: 2.5em;
             text-shadow: 0 0 10px #8b00ff, 0 0 20px #4b0082;
             letter-spacing: 3px;
         }
 
-        h1::before {
+        body[data-theme="goth"] h1::before {
             content: '🦇 ';
         }
 
-        h1::after {
+        body[data-theme="goth"] h1::after {
             content: ' 💀';
         }
 
         .controls {
             margin-bottom: 20px;
             padding: 20px;
-            background-color: #0a0014;
+            background-color: #f9f9f9;
             border-radius: 4px;
+            transition: all 0.5s ease;
+        }
+
+        body[data-theme="goth"] .controls {
+            background-color: #0a0014;
             border: 1px solid #4b0082;
             box-shadow: inset 0 0 20px rgba(139, 0, 139, 0.3);
         }
@@ -86,7 +134,7 @@
             margin-bottom: 10px;
         }
 
-        .control-group::before {
+        body[data-theme="goth"] .control-group::before {
             content: '💀 ';
         }
 
@@ -94,6 +142,11 @@
             display: inline-block;
             margin-right: 8px;
             font-weight: 500;
+            color: #333;
+            transition: all 0.5s ease;
+        }
+
+        body[data-theme="goth"] label {
             color: #c080ff;
             text-shadow: 0 0 5px #8b00ff;
         }
@@ -101,8 +154,15 @@
         input[type="number"] {
             width: 80px;
             padding: 6px;
-            border: 2px solid #4b0082;
+            border: 1px solid #ddd;
             border-radius: 4px;
+            background-color: white;
+            color: #333;
+            transition: all 0.5s ease;
+        }
+
+        body[data-theme="goth"] input[type="number"] {
+            border: 2px solid #4b0082;
             background-color: #1a0a1a;
             color: #c080ff;
             font-family: 'Courier New', monospace;
@@ -110,41 +170,58 @@
 
         input[type="number"]:focus {
             outline: none;
+            border-color: #007bff;
+        }
+
+        body[data-theme="goth"] input[type="number"]:focus {
             border-color: #8b00ff;
             box-shadow: 0 0 10px rgba(139, 0, 255, 0.5);
         }
 
         button {
             padding: 8px 16px;
-            background: linear-gradient(135deg, #4b0082 0%, #8b00ff 100%);
-            color: #ffffff;
-            border: 2px solid #8b00ff;
+            background-color: #007bff;
+            color: white;
+            border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        body[data-theme="goth"] button {
+            background: linear-gradient(135deg, #4b0082 0%, #8b00ff 100%);
+            border: 2px solid #8b00ff;
             font-family: 'Courier New', monospace;
             font-weight: bold;
             text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
             box-shadow: 0 0 10px rgba(139, 0, 255, 0.4);
-            transition: all 0.3s ease;
         }
 
-        button::before {
+        body[data-theme="goth"] button::before {
             content: '🦇 ';
         }
 
         button:hover {
+            background-color: #0056b3;
+        }
+
+        body[data-theme="goth"] button:hover {
             background: linear-gradient(135deg, #6a0dad 0%, #9d4edd 100%);
             box-shadow: 0 0 20px rgba(139, 0, 255, 0.8);
             transform: translateY(-2px);
         }
 
         button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            color: #666;
+        }
+
+        body[data-theme="goth"] button:disabled {
             background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
             border-color: #3a3a3a;
-            cursor: not-allowed;
             box-shadow: none;
-            color: #666;
         }
 
         button:disabled:hover {
@@ -154,8 +231,13 @@
         .color-palette {
             margin-bottom: 20px;
             padding: 15px;
-            background-color: #0a0014;
+            background-color: #f9f9f9;
             border-radius: 4px;
+            transition: all 0.5s ease;
+        }
+
+        body[data-theme="goth"] .color-palette {
+            background-color: #0a0014;
             border: 1px solid #4b0082;
             box-shadow: inset 0 0 20px rgba(139, 0, 139, 0.3);
         }
@@ -163,15 +245,20 @@
         .color-palette h3 {
             margin-bottom: 10px;
             font-size: 16px;
+            color: #333;
+            transition: all 0.5s ease;
+        }
+
+        body[data-theme="goth"] .color-palette h3 {
             color: #c080ff;
             text-shadow: 0 0 5px #8b00ff;
         }
 
-        .color-palette h3::before {
+        body[data-theme="goth"] .color-palette h3::before {
             content: '💀 ';
         }
 
-        .color-palette h3::after {
+        body[data-theme="goth"] .color-palette h3::after {
             content: ' 💀';
         }
 
@@ -188,15 +275,26 @@
             border-radius: 4px;
             cursor: pointer;
             transition: transform 0.1s, border-color 0.2s, box-shadow 0.2s;
+        }
+
+        body[data-theme="goth"] .color-option {
             box-shadow: 0 0 5px rgba(139, 0, 255, 0.3);
         }
 
         .color-option:hover {
             transform: scale(1.1);
+        }
+
+        body[data-theme="goth"] .color-option:hover {
             box-shadow: 0 0 15px rgba(139, 0, 255, 0.6);
         }
 
         .color-option.selected {
+            border-color: #333;
+            box-shadow: 0 0 0 2px white, 0 0 0 4px #333;
+        }
+
+        body[data-theme="goth"] .color-option.selected {
             border-color: #8b00ff;
             box-shadow: 0 0 0 2px #1a0a1a, 0 0 0 4px #8b00ff, 0 0 20px rgba(139, 0, 255, 0.8);
         }
@@ -249,11 +347,17 @@
         input[type="color"] {
             width: 60px;
             height: 40px;
-            border: 2px solid #8b00ff;
+            border: 2px solid #ddd;
             border-radius: 4px;
-            background-color: #1a0a1a;
+            background-color: white;
             cursor: pointer;
             padding: 2px;
+            transition: all 0.5s ease;
+        }
+
+        body[data-theme="goth"] input[type="color"] {
+            border: 2px solid #8b00ff;
+            background-color: #1a0a1a;
         }
 
         input[type="color"]::-webkit-color-swatch-wrapper {
@@ -268,16 +372,27 @@
         input[type="text"] {
             width: 100px;
             padding: 8px;
-            border: 2px solid #4b0082;
+            border: 2px solid #ddd;
             border-radius: 4px;
+            background-color: white;
+            color: #333;
+            text-transform: uppercase;
+            transition: all 0.5s ease;
+        }
+
+        body[data-theme="goth"] input[type="text"] {
+            border: 2px solid #4b0082;
             background-color: #1a0a1a;
             color: #c080ff;
             font-family: 'Courier New', monospace;
-            text-transform: uppercase;
         }
 
         input[type="text"]:focus {
             outline: none;
+            border-color: #007bff;
+        }
+
+        body[data-theme="goth"] input[type="text"]:focus {
             border-color: #8b00ff;
             box-shadow: 0 0 10px rgba(139, 0, 255, 0.5);
         }
@@ -289,6 +404,12 @@
 
         #grid-container {
             display: inline-block;
+            border: 2px solid #333;
+            background-color: white;
+            transition: all 0.5s ease;
+        }
+
+        body[data-theme="goth"] #grid-container {
             border: 3px solid #8b00ff;
             background-color: #0a0014;
             box-shadow: 0 0 30px rgba(139, 0, 255, 0.6), inset 0 0 20px rgba(139, 0, 255, 0.2);
@@ -302,15 +423,22 @@
         .grid-cell {
             width: 30px;
             height: 30px;
-            border: 1px solid #2a0a2a;
+            border: 1px solid #ddd;
             cursor: pointer;
             transition: opacity 0.1s, box-shadow 0.2s;
             touch-action: none;
             -webkit-tap-highlight-color: transparent;
         }
 
+        body[data-theme="goth"] .grid-cell {
+            border: 1px solid #2a0a2a;
+        }
+
         .grid-cell:hover {
             opacity: 0.8;
+        }
+
+        body[data-theme="goth"] .grid-cell:hover {
             box-shadow: inset 0 0 10px rgba(139, 0, 255, 0.5);
         }
 
@@ -321,23 +449,38 @@
         .info {
             margin-top: 20px;
             padding: 15px;
+            background-color: #e7f3ff;
+            border-left: 4px solid #007bff;
+            border-radius: 4px;
+            transition: all 0.5s ease;
+        }
+
+        body[data-theme="goth"] .info {
             background-color: #0a0014;
             border-left: 4px solid #8b00ff;
-            border-radius: 4px;
             border: 2px solid #4b0082;
             box-shadow: 0 0 20px rgba(139, 0, 255, 0.3);
         }
 
         .info p {
             margin-bottom: 5px;
+            color: #555;
+            transition: all 0.5s ease;
+        }
+
+        body[data-theme="goth"] .info p {
             color: #c080ff;
         }
 
-        .info p::before {
+        body[data-theme="goth"] .info p::before {
             content: '🦇 ';
         }
 
         .info strong {
+            color: #007bff;
+        }
+
+        body[data-theme="goth"] .info strong {
             color: #ff80ff;
             text-shadow: 0 0 5px #8b00ff;
         }
@@ -488,8 +631,9 @@
     </style>
 </head>
 <body>
+    <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">💀</div>
     <div class="container">
-        <h1>GOTHIC KNITTING CHART DESIGNER</h1>
+        <h1>Knitting Chart Designer</h1>
 
         <div class="controls">
             <div class="control-group">
@@ -522,19 +666,35 @@
         <div id="grid-container"></div>
 
         <div class="info">
-            <p><strong>How to summon your dark patterns:</strong></p>
-            <p>1. Set your cursed grid dimensions and conjure with "Create Grid"</p>
-            <p>2. Select your shade from the abyss</p>
-            <p>3. Click to paint the void, or drag to spread darkness across multiple cells</p>
-            <p>4. Click again with the same color to banish it back to the void</p>
-            <p>5. Undo/Redo your dark arts with buttons or rituals (Ctrl+Z / Ctrl+Shift+Z)</p>
-            <p>6. "Clear Grid" to return all to darkness</p>
+            <p><strong>How to use:</strong></p>
+            <p>1. Set your desired grid size and click "Create Grid"</p>
+            <p>2. Select a color from the palette</p>
+            <p>3. Click to paint a cell, or drag to paint multiple cells</p>
+            <p>4. Click again with the same color to erase it back to white</p>
+            <p>5. Use Undo/Redo buttons or keyboard shortcuts (Ctrl+Z / Ctrl+Shift+Z)</p>
+            <p>6. Click "Clear Grid" to reset everything</p>
         </div>
     </div>
 
     <script>
+        // Normal color palette for knitting
+        const normalPalette = [
+            '#FFFFFF', // White (default/erase)
+            '#000000', // Black
+            '#FF6B6B', // Red
+            '#4ECDC4', // Teal
+            '#45B7D1', // Blue
+            '#FFA07A', // Light Salmon
+            '#98D8C8', // Mint
+            '#F7DC6F', // Yellow
+            '#BB8FCE', // Purple
+            '#85929E', // Gray
+            '#F8B400', // Orange
+            '#52B788', // Green
+        ];
+
         // Gothic color palette for knitting
-        let colors = [
+        const gothPalette = [
             '#0a0014', // Deep Void (default/erase)
             '#000000', // Black
             '#8b00ff', // Electric Purple
@@ -549,7 +709,9 @@
             '#c080ff', // Lilac Glow
         ];
 
-        const defaultColors = [...colors]; // Store original palette
+        let colors = [...normalPalette];
+        let defaultColors = [...normalPalette]; // Store original palette for current theme
+        let isGothMode = false;
 
         let selectedColor = colors[0];
         let gridData = [];
@@ -557,6 +719,68 @@
         let currentHistoryIndex = -1;
         let isDrawing = false;
         let hasDrawn = false;
+
+        // Get default/blank color based on theme
+        function getBlankColor() {
+            return isGothMode ? '#0a0014' : '#FFFFFF';
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            isGothMode = !isGothMode;
+            document.body.dataset.theme = isGothMode ? 'goth' : '';
+            document.title = isGothMode ? '🦇 Gothic Knitting Chart Designer 💀' : 'Knitting Chart Designer';
+
+            // Update h1 text
+            const h1 = document.querySelector('h1');
+            h1.textContent = isGothMode ? 'GOTHIC KNITTING CHART DESIGNER' : 'Knitting Chart Designer';
+
+            // Update info text
+            updateInfoText();
+
+            // Switch color palette
+            colors = isGothMode ? [...gothPalette] : [...normalPalette];
+            defaultColors = isGothMode ? [...gothPalette] : [...normalPalette];
+            selectedColor = colors[0];
+            initColorPalette();
+
+            // Save preference
+            localStorage.setItem('theme', isGothMode ? 'goth' : 'normal');
+        }
+
+        // Update info text based on theme
+        function updateInfoText() {
+            const info = document.querySelector('.info');
+            if (isGothMode) {
+                info.innerHTML = `
+                    <p><strong>How to summon your dark patterns:</strong></p>
+                    <p>1. Set your cursed grid dimensions and conjure with "Create Grid"</p>
+                    <p>2. Select your shade from the abyss</p>
+                    <p>3. Click to paint the void, or drag to spread darkness across multiple cells</p>
+                    <p>4. Click again with the same color to banish it back to the void</p>
+                    <p>5. Undo/Redo your dark arts with buttons or rituals (Ctrl+Z / Ctrl+Shift+Z)</p>
+                    <p>6. "Clear Grid" to return all to darkness</p>
+                `;
+            } else {
+                info.innerHTML = `
+                    <p><strong>How to use:</strong></p>
+                    <p>1. Set your desired grid size and click "Create Grid"</p>
+                    <p>2. Select a color from the palette</p>
+                    <p>3. Click to paint a cell, or drag to paint multiple cells</p>
+                    <p>4. Click again with the same color to erase it back to white</p>
+                    <p>5. Use Undo/Redo buttons or keyboard shortcuts (Ctrl+Z / Ctrl+Shift+Z)</p>
+                    <p>6. Click "Clear Grid" to reset everything</p>
+                `;
+            }
+        }
+
+        // Load saved theme on startup
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'goth') {
+                toggleTheme();
+            }
+        }
 
         // Initialize color palette
         function initColorPalette() {
@@ -756,7 +980,7 @@
                 for (let j = 0; j < cols; j++) {
                     const cell = document.createElement('div');
                     cell.className = 'grid-cell';
-                    cell.style.backgroundColor = '#0a0014';
+                    cell.style.backgroundColor = getBlankColor();
                     cell.dataset.row = i;
                     cell.dataset.col = j;
 
@@ -798,7 +1022,7 @@
                     }, { passive: false });
 
                     row.appendChild(cell);
-                    rowData.push('#0a0014');
+                    rowData.push(getBlankColor());
                 }
 
                 container.appendChild(row);
@@ -816,10 +1040,10 @@
             const currentColor = gridData[row][col];
             let newColor;
 
-            // Toggle behavior: if clicking a cell that already has the selected color, revert to void
+            // Toggle behavior: if clicking a cell that already has the selected color, revert to blank
             // But only for single clicks, not when dragging
             if (allowToggle && currentColor === selectedColor) {
-                newColor = '#0a0014'; // Deep Void
+                newColor = getBlankColor();
             } else {
                 newColor = selectedColor;
             }
@@ -839,15 +1063,17 @@
 
         // Clear the grid
         function clearGrid() {
+            const blankColor = getBlankColor();
             document.querySelectorAll('.grid-cell').forEach(cell => {
-                cell.style.backgroundColor = '#0a0014';
+                cell.style.backgroundColor = blankColor;
             });
-            gridData = gridData.map(row => row.map(() => '#0a0014'));
+            gridData = gridData.map(row => row.map(() => blankColor));
             saveState();
         }
 
         // Initialize on load
         window.onload = () => {
+            loadTheme();
             initColorPalette();
             createGrid();
             syncColorInputs();
