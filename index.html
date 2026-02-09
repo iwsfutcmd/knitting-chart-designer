@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knitting Chart Designer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .control-group {
+            display: inline-block;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: inline-block;
+            margin-right: 8px;
+            font-weight: 500;
+        }
+
+        input[type="number"] {
+            width: 80px;
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        button:disabled:hover {
+            background-color: #ccc;
+        }
+
+        .color-palette {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .color-palette h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .color-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border: 3px solid transparent;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.1s, border-color 0.2s;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.selected {
+            border-color: #333;
+            box-shadow: 0 0 0 2px white, 0 0 0 4px #333;
+        }
+
+        #grid-container {
+            display: inline-block;
+            border: 2px solid #333;
+            background-color: white;
+        }
+
+        .grid-row {
+            display: flex;
+            line-height: 0;
+        }
+
+        .grid-cell {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: opacity 0.1s;
+        }
+
+        .grid-cell:hover {
+            opacity: 0.8;
+        }
+
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e7f3ff;
+            border-left: 4px solid #007bff;
+            border-radius: 4px;
+        }
+
+        .info p {
+            margin-bottom: 5px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Knitting Chart Designer</h1>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="rows">Rows:</label>
+                <input type="number" id="rows" min="1" max="100" value="20">
+            </div>
+            <div class="control-group">
+                <label for="cols">Columns:</label>
+                <input type="number" id="cols" min="1" max="100" value="20">
+            </div>
+            <button onclick="createGrid()">Create Grid</button>
+            <button onclick="clearGrid()">Clear Grid</button>
+            <button id="undo-btn" onclick="undo()" disabled>Undo (Ctrl+Z)</button>
+            <button id="redo-btn" onclick="redo()" disabled>Redo (Ctrl+Shift+Z)</button>
+        </div>
+
+        <div class="color-palette">
+            <h3>Select Color:</h3>
+            <div class="color-options" id="color-options"></div>
+        </div>
+
+        <div id="grid-container"></div>
+
+        <div class="info">
+            <p><strong>How to use:</strong></p>
+            <p>1. Set your desired grid size and click "Create Grid"</p>
+            <p>2. Select a color from the palette</p>
+            <p>3. Click on any square to paint it, or click and drag to paint multiple squares</p>
+            <p>4. Click a square again (with the same color selected) to erase it back to white</p>
+            <p>5. Use Undo/Redo buttons or keyboard shortcuts (Ctrl+Z / Ctrl+Shift+Z) to navigate your changes</p>
+            <p>6. Click "Clear Grid" to reset everything</p>
+        </div>
+    </div>
+
+    <script>
+        // Default color palette for knitting
+        const colors = [
+            '#FFFFFF', // White
+            '#000000', // Black
+            '#FF6B6B', // Red
+            '#4ECDC4', // Teal
+            '#45B7D1', // Blue
+            '#FFA07A', // Light Salmon
+            '#98D8C8', // Mint
+            '#F7DC6F', // Yellow
+            '#BB8FCE', // Purple
+            '#85929E', // Gray
+            '#F8B400', // Orange
+            '#52B788', // Green
+        ];
+
+        let selectedColor = colors[0];
+        let gridData = [];
+        let history = [];
+        let currentHistoryIndex = -1;
+        let isDrawing = false;
+        let hasDrawn = false;
+
+        // Initialize color palette
+        function initColorPalette() {
+            const container = document.getElementById('color-options');
+            container.innerHTML = '';
+
+            colors.forEach((color, index) => {
+                const colorDiv = document.createElement('div');
+                colorDiv.className = 'color-option' + (index === 0 ? ' selected' : '');
+                colorDiv.style.backgroundColor = color;
+                colorDiv.onclick = () => selectColor(color, colorDiv);
+                container.appendChild(colorDiv);
+            });
+        }
+
+        // Select a color
+        function selectColor(color, element) {
+            selectedColor = color;
+            document.querySelectorAll('.color-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            element.classList.add('selected');
+        }
+
+        // Save current state to history
+        function saveState() {
+            // Remove any future states if we're not at the end of history
+            if (currentHistoryIndex < history.length - 1) {
+                history = history.slice(0, currentHistoryIndex + 1);
+            }
+
+            // Deep clone the grid data
+            const stateCopy = gridData.map(row => [...row]);
+            history.push(stateCopy);
+            currentHistoryIndex++;
+
+            // Limit history to 50 states to prevent memory issues
+            if (history.length > 50) {
+                history.shift();
+                currentHistoryIndex--;
+            }
+
+            updateUndoRedoButtons();
+        }
+
+        // Restore a state from history
+        function restoreState(state) {
+            gridData = state.map(row => [...row]);
+
+            // Update the visual grid
+            const cells = document.querySelectorAll('.grid-cell');
+            cells.forEach(cell => {
+                const row = parseInt(cell.dataset.row);
+                const col = parseInt(cell.dataset.col);
+                cell.style.backgroundColor = gridData[row][col];
+            });
+        }
+
+        // Undo function
+        function undo() {
+            if (currentHistoryIndex > 0) {
+                currentHistoryIndex--;
+                restoreState(history[currentHistoryIndex]);
+                updateUndoRedoButtons();
+            }
+        }
+
+        // Redo function
+        function redo() {
+            if (currentHistoryIndex < history.length - 1) {
+                currentHistoryIndex++;
+                restoreState(history[currentHistoryIndex]);
+                updateUndoRedoButtons();
+            }
+        }
+
+        // Update undo/redo button states
+        function updateUndoRedoButtons() {
+            const undoBtn = document.getElementById('undo-btn');
+            const redoBtn = document.getElementById('redo-btn');
+
+            undoBtn.disabled = currentHistoryIndex <= 0;
+            redoBtn.disabled = currentHistoryIndex >= history.length - 1;
+        }
+
+        // Create the grid
+        function createGrid() {
+            const rows = parseInt(document.getElementById('rows').value);
+            const cols = parseInt(document.getElementById('cols').value);
+
+            if (rows < 1 || rows > 100 || cols < 1 || cols > 100) {
+                alert('Please enter valid dimensions (1-100)');
+                return;
+            }
+
+            const container = document.getElementById('grid-container');
+            container.innerHTML = '';
+            gridData = [];
+
+            for (let i = 0; i < rows; i++) {
+                const row = document.createElement('div');
+                row.className = 'grid-row';
+                const rowData = [];
+
+                for (let j = 0; j < cols; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-cell';
+                    cell.style.backgroundColor = '#FFFFFF';
+                    cell.dataset.row = i;
+                    cell.dataset.col = j;
+
+                    // Mouse down starts drawing
+                    cell.addEventListener('mousedown', (e) => {
+                        e.preventDefault(); // Prevent text selection while dragging
+                        isDrawing = true;
+                        hasDrawn = false;
+                        paintCell(cell, i, j, false, true); // Allow toggle on initial click
+                    });
+
+                    // Mouse enter paints if we're drawing
+                    cell.addEventListener('mouseenter', () => {
+                        if (isDrawing) {
+                            paintCell(cell, i, j, false, false); // No toggle during drag
+                        }
+                    });
+
+                    row.appendChild(cell);
+                    rowData.push('#FFFFFF');
+                }
+
+                container.appendChild(row);
+                gridData.push(rowData);
+            }
+
+            // Reset history and save initial state
+            history = [];
+            currentHistoryIndex = -1;
+            saveState();
+        }
+
+        // Paint a cell
+        function paintCell(cell, row, col, shouldSaveState = true, allowToggle = true) {
+            const currentColor = gridData[row][col];
+            let newColor;
+
+            // Toggle behavior: if clicking a cell that already has the selected color, revert to white
+            // But only for single clicks, not when dragging
+            if (allowToggle && currentColor === selectedColor) {
+                newColor = '#FFFFFF';
+            } else {
+                newColor = selectedColor;
+            }
+
+            // Only update if the color actually changed
+            if (currentColor !== newColor) {
+                cell.style.backgroundColor = newColor;
+                gridData[row][col] = newColor;
+                hasDrawn = true;
+
+                // Only save state immediately if not in drawing mode
+                if (shouldSaveState) {
+                    saveState();
+                }
+            }
+        }
+
+        // Clear the grid
+        function clearGrid() {
+            document.querySelectorAll('.grid-cell').forEach(cell => {
+                cell.style.backgroundColor = '#FFFFFF';
+            });
+            gridData = gridData.map(row => row.map(() => '#FFFFFF'));
+            saveState();
+        }
+
+        // Initialize on load
+        window.onload = () => {
+            initColorPalette();
+            createGrid();
+        };
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Undo: Ctrl+Z (or Cmd+Z on Mac)
+            if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+                e.preventDefault();
+                undo();
+            }
+            // Redo: Ctrl+Shift+Z or Ctrl+Y (or Cmd+Shift+Z or Cmd+Y on Mac)
+            else if ((e.ctrlKey || e.metaKey) && (e.shiftKey && e.key === 'z' || e.key === 'y')) {
+                e.preventDefault();
+                redo();
+            }
+        });
+
+        // Mouse up stops drawing and saves state
+        document.addEventListener('mouseup', () => {
+            if (isDrawing) {
+                isDrawing = false;
+                // Only save state if we actually drew something
+                if (hasDrawn) {
+                    saveState();
+                    hasDrawn = false;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
