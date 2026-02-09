@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Knitting Chart Designer</title>
+    <title>🦇 Gothic Knitting Chart Designer 💀</title>
     <style>
         * {
             margin: 0;
@@ -12,30 +12,72 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Courier New', 'Courier', monospace;
             padding: 20px;
-            background-color: #f5f5f5;
+            background: linear-gradient(135deg, #1a0033 0%, #000000 50%, #1a0033 100%);
+            background-attachment: fixed;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀';
+            position: fixed;
+            top: 5px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 20px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇 💀 🦇';
+            position: fixed;
+            bottom: 5px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 20px;
+            z-index: 1000;
+            pointer-events: none;
         }
 
         .container {
             max-width: 1200px;
-            margin: 0 auto;
-            background-color: white;
+            margin: 50px auto 20px auto;
+            background-color: #1a0a1a;
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 30px rgba(139, 0, 139, 0.5), 0 0 60px rgba(75, 0, 130, 0.3);
+            border: 2px solid #4b0082;
         }
 
         h1 {
             margin-bottom: 20px;
-            color: #333;
+            color: #c080ff;
+            text-align: center;
+            font-size: 2.5em;
+            text-shadow: 0 0 10px #8b00ff, 0 0 20px #4b0082;
+            letter-spacing: 3px;
+        }
+
+        h1::before {
+            content: '🦇 ';
+        }
+
+        h1::after {
+            content: ' 💀';
         }
 
         .controls {
             margin-bottom: 20px;
             padding: 20px;
-            background-color: #f9f9f9;
+            background-color: #0a0014;
             border-radius: 4px;
+            border: 1px solid #4b0082;
+            box-shadow: inset 0 0 20px rgba(139, 0, 139, 0.3);
         }
 
         .control-group {
@@ -44,52 +86,93 @@
             margin-bottom: 10px;
         }
 
+        .control-group::before {
+            content: '💀 ';
+        }
+
         label {
             display: inline-block;
             margin-right: 8px;
             font-weight: 500;
+            color: #c080ff;
+            text-shadow: 0 0 5px #8b00ff;
         }
 
         input[type="number"] {
             width: 80px;
             padding: 6px;
-            border: 1px solid #ddd;
+            border: 2px solid #4b0082;
             border-radius: 4px;
+            background-color: #1a0a1a;
+            color: #c080ff;
+            font-family: 'Courier New', monospace;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #8b00ff;
+            box-shadow: 0 0 10px rgba(139, 0, 255, 0.5);
         }
 
         button {
             padding: 8px 16px;
-            background-color: #007bff;
-            color: white;
-            border: none;
+            background: linear-gradient(135deg, #4b0082 0%, #8b00ff 100%);
+            color: #ffffff;
+            border: 2px solid #8b00ff;
             border-radius: 4px;
             cursor: pointer;
             font-size: 14px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 10px rgba(139, 0, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        button::before {
+            content: '🦇 ';
         }
 
         button:hover {
-            background-color: #0056b3;
+            background: linear-gradient(135deg, #6a0dad 0%, #9d4edd 100%);
+            box-shadow: 0 0 20px rgba(139, 0, 255, 0.8);
+            transform: translateY(-2px);
         }
 
         button:disabled {
-            background-color: #ccc;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            border-color: #3a3a3a;
             cursor: not-allowed;
+            box-shadow: none;
+            color: #666;
         }
 
         button:disabled:hover {
-            background-color: #ccc;
+            transform: none;
         }
 
         .color-palette {
             margin-bottom: 20px;
             padding: 15px;
-            background-color: #f9f9f9;
+            background-color: #0a0014;
             border-radius: 4px;
+            border: 1px solid #4b0082;
+            box-shadow: inset 0 0 20px rgba(139, 0, 139, 0.3);
         }
 
         .color-palette h3 {
             margin-bottom: 10px;
             font-size: 16px;
+            color: #c080ff;
+            text-shadow: 0 0 5px #8b00ff;
+        }
+
+        .color-palette h3::before {
+            content: '💀 ';
+        }
+
+        .color-palette h3::after {
+            content: ' 💀';
         }
 
         .color-options {
@@ -104,22 +187,111 @@
             border: 3px solid transparent;
             border-radius: 4px;
             cursor: pointer;
-            transition: transform 0.1s, border-color 0.2s;
+            transition: transform 0.1s, border-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 0 5px rgba(139, 0, 255, 0.3);
         }
 
         .color-option:hover {
             transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(139, 0, 255, 0.6);
         }
 
         .color-option.selected {
-            border-color: #333;
-            box-shadow: 0 0 0 2px white, 0 0 0 4px #333;
+            border-color: #8b00ff;
+            box-shadow: 0 0 0 2px #1a0a1a, 0 0 0 4px #8b00ff, 0 0 20px rgba(139, 0, 255, 0.8);
+        }
+
+        .color-option .remove-btn {
+            display: none;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 20px;
+            height: 20px;
+            background: #ff0066;
+            border: 2px solid #1a0a1a;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+            line-height: 16px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(255, 0, 102, 0.8);
+        }
+
+        .color-option {
+            position: relative;
+        }
+
+        .color-option:hover .remove-btn {
+            display: block;
+        }
+
+        .color-option.remove-btn:hover {
+            background: #ff3385;
+        }
+
+        .color-picker-controls {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #4b0082;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .color-picker-controls label {
+            color: #c080ff;
+        }
+
+        input[type="color"] {
+            width: 60px;
+            height: 40px;
+            border: 2px solid #8b00ff;
+            border-radius: 4px;
+            background-color: #1a0a1a;
+            cursor: pointer;
+            padding: 2px;
+        }
+
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 2px;
+        }
+
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 2px;
+        }
+
+        input[type="text"] {
+            width: 100px;
+            padding: 8px;
+            border: 2px solid #4b0082;
+            border-radius: 4px;
+            background-color: #1a0a1a;
+            color: #c080ff;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #8b00ff;
+            box-shadow: 0 0 10px rgba(139, 0, 255, 0.5);
+        }
+
+        .add-color-btn {
+            padding: 8px 16px;
+            font-size: 13px;
         }
 
         #grid-container {
             display: inline-block;
-            border: 2px solid #333;
-            background-color: white;
+            border: 3px solid #8b00ff;
+            background-color: #0a0014;
+            box-shadow: 0 0 30px rgba(139, 0, 255, 0.6), inset 0 0 20px rgba(139, 0, 255, 0.2);
         }
 
         .grid-row {
@@ -130,32 +302,44 @@
         .grid-cell {
             width: 30px;
             height: 30px;
-            border: 1px solid #ddd;
+            border: 1px solid #2a0a2a;
             cursor: pointer;
-            transition: opacity 0.1s;
+            transition: opacity 0.1s, box-shadow 0.2s;
         }
 
         .grid-cell:hover {
             opacity: 0.8;
+            box-shadow: inset 0 0 10px rgba(139, 0, 255, 0.5);
         }
 
         .info {
             margin-top: 20px;
             padding: 15px;
-            background-color: #e7f3ff;
-            border-left: 4px solid #007bff;
+            background-color: #0a0014;
+            border-left: 4px solid #8b00ff;
             border-radius: 4px;
+            border: 2px solid #4b0082;
+            box-shadow: 0 0 20px rgba(139, 0, 255, 0.3);
         }
 
         .info p {
             margin-bottom: 5px;
-            color: #555;
+            color: #c080ff;
+        }
+
+        .info p::before {
+            content: '🦇 ';
+        }
+
+        .info strong {
+            color: #ff80ff;
+            text-shadow: 0 0 5px #8b00ff;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Knitting Chart Designer</h1>
+        <h1>GOTHIC KNITTING CHART DESIGNER</h1>
 
         <div class="controls">
             <div class="control-group">
@@ -175,37 +359,47 @@
         <div class="color-palette">
             <h3>Select Color:</h3>
             <div class="color-options" id="color-options"></div>
+
+            <div class="color-picker-controls">
+                <label for="color-picker">🦇 Summon New Shade:</label>
+                <input type="color" id="color-picker" value="#8b00ff">
+                <label for="hex-input">Hex Code:</label>
+                <input type="text" id="hex-input" placeholder="#8b00ff" maxlength="7">
+                <button class="add-color-btn" onclick="addCustomColor()">Add Color</button>
+            </div>
         </div>
 
         <div id="grid-container"></div>
 
         <div class="info">
-            <p><strong>How to use:</strong></p>
-            <p>1. Set your desired grid size and click "Create Grid"</p>
-            <p>2. Select a color from the palette</p>
-            <p>3. Click on any square to paint it, or click and drag to paint multiple squares</p>
-            <p>4. Click a square again (with the same color selected) to erase it back to white</p>
-            <p>5. Use Undo/Redo buttons or keyboard shortcuts (Ctrl+Z / Ctrl+Shift+Z) to navigate your changes</p>
-            <p>6. Click "Clear Grid" to reset everything</p>
+            <p><strong>How to summon your dark patterns:</strong></p>
+            <p>1. Set your cursed grid dimensions and conjure with "Create Grid"</p>
+            <p>2. Select your shade from the abyss</p>
+            <p>3. Click to paint the void, or drag to spread darkness across multiple cells</p>
+            <p>4. Click again with the same color to banish it back to the void</p>
+            <p>5. Undo/Redo your dark arts with buttons or rituals (Ctrl+Z / Ctrl+Shift+Z)</p>
+            <p>6. "Clear Grid" to return all to darkness</p>
         </div>
     </div>
 
     <script>
-        // Default color palette for knitting
-        const colors = [
-            '#FFFFFF', // White
+        // Gothic color palette for knitting
+        let colors = [
+            '#0a0014', // Deep Void (default/erase)
             '#000000', // Black
-            '#FF6B6B', // Red
-            '#4ECDC4', // Teal
-            '#45B7D1', // Blue
-            '#FFA07A', // Light Salmon
-            '#98D8C8', // Mint
-            '#F7DC6F', // Yellow
-            '#BB8FCE', // Purple
-            '#85929E', // Gray
-            '#F8B400', // Orange
-            '#52B788', // Green
+            '#8b00ff', // Electric Purple
+            '#4b0082', // Indigo
+            '#800020', // Burgundy
+            '#8b0000', // Dark Red
+            '#2d1b2e', // Dark Plum
+            '#1a0033', // Deep Purple
+            '#4a0e4e', // Dark Violet
+            '#660066', // Deep Magenta
+            '#2f1b3c', // Gothic Purple
+            '#c080ff', // Lilac Glow
         ];
+
+        const defaultColors = [...colors]; // Store original palette
 
         let selectedColor = colors[0];
         let gridData = [];
@@ -221,9 +415,22 @@
 
             colors.forEach((color, index) => {
                 const colorDiv = document.createElement('div');
-                colorDiv.className = 'color-option' + (index === 0 ? ' selected' : '');
+                colorDiv.className = 'color-option' + (color === selectedColor ? ' selected' : '');
                 colorDiv.style.backgroundColor = color;
                 colorDiv.onclick = () => selectColor(color, colorDiv);
+
+                // Add remove button for custom colors (not in default palette)
+                if (!defaultColors.includes(color)) {
+                    const removeBtn = document.createElement('div');
+                    removeBtn.className = 'remove-btn';
+                    removeBtn.innerHTML = '✕';
+                    removeBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        removeColor(color);
+                    };
+                    colorDiv.appendChild(removeBtn);
+                }
+
                 container.appendChild(colorDiv);
             });
         }
@@ -235,6 +442,85 @@
                 el.classList.remove('selected');
             });
             element.classList.add('selected');
+        }
+
+        // Add custom color to palette
+        function addCustomColor() {
+            const colorPicker = document.getElementById('color-picker');
+            const hexInput = document.getElementById('hex-input');
+
+            // Get color from hex input if provided, otherwise from color picker
+            let newColor = hexInput.value.trim();
+            if (!newColor) {
+                newColor = colorPicker.value;
+            }
+
+            // Validate and normalize hex code
+            if (!newColor.startsWith('#')) {
+                newColor = '#' + newColor;
+            }
+            newColor = newColor.toLowerCase();
+
+            // Validate hex format
+            if (!/^#[0-9a-f]{6}$/i.test(newColor)) {
+                alert('Invalid hex color code! Use format: #8b00ff');
+                return;
+            }
+
+            // Check if color already exists
+            if (colors.includes(newColor)) {
+                alert('This shade already haunts your palette!');
+                return;
+            }
+
+            // Add color to palette
+            colors.push(newColor);
+            initColorPalette();
+
+            // Clear input
+            hexInput.value = '';
+        }
+
+        // Remove custom color from palette
+        function removeColor(color) {
+            // Don't allow removing default colors
+            if (defaultColors.includes(color)) {
+                return;
+            }
+
+            // If the color being removed is selected, select the first color
+            if (selectedColor === color) {
+                selectedColor = colors[0];
+            }
+
+            // Remove color from array
+            colors = colors.filter(c => c !== color);
+            initColorPalette();
+        }
+
+        // Sync color picker and hex input
+        function syncColorInputs() {
+            const colorPicker = document.getElementById('color-picker');
+            const hexInput = document.getElementById('hex-input');
+
+            colorPicker.addEventListener('input', () => {
+                hexInput.value = colorPicker.value;
+            });
+
+            hexInput.addEventListener('input', () => {
+                const value = hexInput.value.trim();
+                if (value.match(/^#?[0-9a-f]{6}$/i)) {
+                    const normalized = value.startsWith('#') ? value : '#' + value;
+                    colorPicker.value = normalized;
+                }
+            });
+
+            // Allow Enter key to add color
+            hexInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    addCustomColor();
+                }
+            });
         }
 
         // Save current state to history
@@ -320,7 +606,7 @@
                 for (let j = 0; j < cols; j++) {
                     const cell = document.createElement('div');
                     cell.className = 'grid-cell';
-                    cell.style.backgroundColor = '#FFFFFF';
+                    cell.style.backgroundColor = '#0a0014';
                     cell.dataset.row = i;
                     cell.dataset.col = j;
 
@@ -340,7 +626,7 @@
                     });
 
                     row.appendChild(cell);
-                    rowData.push('#FFFFFF');
+                    rowData.push('#0a0014');
                 }
 
                 container.appendChild(row);
@@ -358,10 +644,10 @@
             const currentColor = gridData[row][col];
             let newColor;
 
-            // Toggle behavior: if clicking a cell that already has the selected color, revert to white
+            // Toggle behavior: if clicking a cell that already has the selected color, revert to void
             // But only for single clicks, not when dragging
             if (allowToggle && currentColor === selectedColor) {
-                newColor = '#FFFFFF';
+                newColor = '#0a0014'; // Deep Void
             } else {
                 newColor = selectedColor;
             }
@@ -382,9 +668,9 @@
         // Clear the grid
         function clearGrid() {
             document.querySelectorAll('.grid-cell').forEach(cell => {
-                cell.style.backgroundColor = '#FFFFFF';
+                cell.style.backgroundColor = '#0a0014';
             });
-            gridData = gridData.map(row => row.map(() => '#FFFFFF'));
+            gridData = gridData.map(row => row.map(() => '#0a0014'));
             saveState();
         }
 
@@ -392,6 +678,7 @@
         window.onload = () => {
             initColorPalette();
             createGrid();
+            syncColorInputs();
         };
 
         // Keyboard shortcuts
