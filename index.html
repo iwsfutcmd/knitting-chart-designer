@@ -494,7 +494,7 @@
             border: 1px solid #ddd;
             cursor: pointer;
             transition: opacity 0.1s, box-shadow 0.2s;
-            touch-action: none;
+            touch-action: pan-x pan-y;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -1075,16 +1075,20 @@
 
                     // Touch start for mobile
                     cell.addEventListener('touchstart', (e) => {
-                        e.preventDefault();
-                        isDrawing = true;
-                        hasDrawn = false;
-                        paintCell(cell, i, j, false, true);
+                        // Only draw with single finger, allow two-finger scroll
+                        if (e.touches.length === 1) {
+                            e.preventDefault();
+                            isDrawing = true;
+                            hasDrawn = false;
+                            paintCell(cell, i, j, false, true);
+                        }
                     }, { passive: false });
 
                     // Touch move for mobile dragging
                     cell.addEventListener('touchmove', (e) => {
-                        e.preventDefault();
-                        if (isDrawing) {
+                        // Only draw with single finger, allow two-finger scroll
+                        if (e.touches.length === 1 && isDrawing) {
+                            e.preventDefault();
                             const touch = e.touches[0];
                             const element = document.elementFromPoint(touch.clientX, touch.clientY);
                             if (element && element.classList.contains('grid-cell')) {
@@ -1092,6 +1096,9 @@
                                 const col = parseInt(element.dataset.col);
                                 paintCell(element, row, col, false, false);
                             }
+                        } else if (e.touches.length > 1) {
+                            // Cancel drawing mode on multi-touch
+                            isDrawing = false;
                         }
                     }, { passive: false });
 
