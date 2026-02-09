@@ -655,10 +655,10 @@
             <div class="color-options" id="color-options"></div>
 
             <div class="color-picker-controls">
-                <label for="color-picker">🦇 Summon New Shade:</label>
-                <input type="color" id="color-picker" value="#8b00ff">
+                <label for="color-picker" id="color-picker-label">Add Custom Color:</label>
+                <input type="color" id="color-picker" value="#007bff">
                 <label for="hex-input">Hex Code:</label>
-                <input type="text" id="hex-input" placeholder="#8b00ff" maxlength="7">
+                <input type="text" id="hex-input" placeholder="#007bff" maxlength="7">
                 <button class="add-color-btn" onclick="addCustomColor()">Add Color</button>
             </div>
         </div>
@@ -734,6 +734,10 @@
             // Update h1 text
             const h1 = document.querySelector('h1');
             h1.textContent = isGothMode ? 'GOTHIC KNITTING CHART DESIGNER' : 'Knitting Chart Designer';
+
+            // Update color picker label
+            const colorPickerLabel = document.getElementById('color-picker-label');
+            colorPickerLabel.textContent = isGothMode ? '🦇 Summon New Shade:' : 'Add Custom Color:';
 
             // Update info text
             updateInfoText();
